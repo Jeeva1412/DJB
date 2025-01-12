@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-center "style="min-height: 85vh;">
+    <div class="w-100 border shadow p-4 " style="max-width: 500px;">
+      <h1 class="text-center mb-4 border-bottom border-3">Sign up for ChatApp</h1>
+      <form class="space-y-3" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" id="username" name="username" class="form-control" style="border: 2px solid #ced4da; border-radius: 0.375rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" required />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" name="password1" class="form-control" style="border: 2px solid #ced4da; border-radius: 0.375rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" required />
+        </div>
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="password2" class="form-control" style="border: 2px solid #ced4da; border-radius: 0.375rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" required />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+      </form>
+      <p class="mt-3 text-center">
+        Already have an account? <a href="{% url 'login' %}" class="text-primary">Login</a>
+      </p>
+    </div>
+  </div>
+  
+{% endblock content %}

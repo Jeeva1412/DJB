@@ -1,0 +1,115 @@
+{% extends 'main.html' %}
+
+{% block head %}
+<style>
+    .custom-card {
+        border: 2px solid;
+    }
+
+    .custom-card-title {
+        color: #7c3aed;
+    }
+
+    .custom-btn {
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .aspect-video {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+
+    .aspect-video > .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Additional styling for the video player */
+    .video-player {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    video {
+        width: 100%;
+        border-radius: 8px;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center text-purple-400 mb-5">Stored Videos</h1>
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-md-6">
+            <div class="d-flex flex-column gap-3">
+                {% for video in videos %}
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <h5 class="custom-card-title">{{ video.client_id }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Date: {{ video.created_at|date:"Y-m-d" }}</p>
+                        <p>Duration: {{ video.duration }}</p>
+                        <button class="btn custom-btn w-100 btn-primary" onclick="selectVideo('{{ video.video.url }}')">
+                            View Recording
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6">
+            <div id="video-player" class="card custom-card p-4">
+                <div id="video-content">
+                    <h2 class="text-purple-400">Select a video to play</h2>
+                    <p class="text-muted">Click on a video to view the playback details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    function selectVideo(videoUrl) {
+        console.log(videoUrl);
+        const player = document.getElementById('video-player');
+        const content = `
+            <h2 class="text-purple-400 mb-4">Video Playback</h2>
+            <div class="aspect-video mb-3 video-player">
+                <video id="video-player-element" controls>
+                    <source src="${videoUrl}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <button class="btn custom-btn" onclick="closeVideo()">Close Video</button>
+        `;
+
+        document.getElementById('video-content').innerHTML = content;
+    }
+
+    function closeVideo() {
+        const defaultContent = `
+            <h2 class="text-purple-400">Select a video to play</h2>
+            <p class="text-muted">Click on a video to view the playback details</p>
+        `;
+        document.getElementById('video-content').innerHTML = defaultContent;
+    }
+</script>
+{% endblock script %}

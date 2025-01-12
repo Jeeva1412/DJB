@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% block content %}
+
+    <div class="container py-5">
+        <h1 class="text-center text-dark mb-4">Welcome to ScreenMonitor</h1>
+        <p class="text-center text-muted mb-5">Monitor and manage your screens with ease</p>
+
+        <div class="row g-4">
+            <!-- Stored Videos -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card border">
+                    <div class="card-header">
+                        <h5 class="card-title">Stored Videos</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Access and review previously recorded screen sessions.</p>
+                        <a href="{% url 'stored-videos' %}" class="btn btn-primary w-100">View Stored Videos</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Stream -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card border">
+                    <div class="card-header">
+                        <h5 class="card-title">Live Stream</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Watch real-time screen activity from a selected client.</p>
+                        <a href="" class="btn btn-primary w-100">Start Live Stream</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiple Clients -->
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card border">
+                    <div class="card-header">
+                        <h5 class="card-title">Multiple Clients</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Monitor multiple client screens simultaneously.</p>
+                        <a href="" class="btn btn-primary w-100">View Multiple Clients</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

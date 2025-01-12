@@ -1,0 +1,109 @@
+{% extends 'main.html' %}
+{% block head %}
+<style>
+    .aspect-video {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+    .aspect-video > .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Multiple Clients</h1>
+    <div class="row g-4">
+        <!-- Mock clients (use JavaScript to dynamically render all clients) -->
+        <div class="col-md-6 col-lg-4" id="client-1">
+            <div class="card border-secondary">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Marketing PC</h5>
+                </div>
+                <div class="card-body">
+                    <div class="aspect-video">
+                        <div id="stream-Client001" class="content">
+                            <p class="text-muted">Waiting for stream...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4" id="client-2">
+            <div class="card border-secondary">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Sales Laptop</h5>
+                </div>
+                <div class="card-body">
+                    <div class="aspect-video">
+                        <div id="stream-Client002" class="content">
+                            <p class="text-muted">Waiting for stream...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4" id="client-3">
+            <div class="card border-secondary">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Design Workstation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="aspect-video">
+                        <div id="stream-Client003" class="content">
+                            <p class="text-muted">Waiting for stream...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add more clients dynamically -->
+    </div>
+</div>
+    
+{% endblock content %}
+
+{% block script %}
+<script>
+    const mockClients = [
+        { id: 'Client001', name: 'Marketing PC' },
+        { id: 'Client002', name: 'Sales Laptop' },
+        { id: 'Client003', name: 'Design Workstation' },
+        { id: 'Client004', name: 'Finance Desktop' },
+        { id: 'Client005', name: 'HR Laptop' },
+        { id: 'Client006', name: 'Engineering Workstation' },
+    ];
+
+    const clientStreams = {};
+
+    function getRandomColor() {
+        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+    }
+
+    function updateStreams() {
+        mockClients.forEach(client => {
+            const streamElement = document.getElementById(`stream-${client.id}`);
+            if (streamElement) {
+                const streamData = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="320" height="240">
+                        <rect width="100%" height="100%" fill="${getRandomColor()}"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="white" text-anchor="middle" dy=".3em">
+                            ${client.name}
+                        </text>
+                    </svg>`;
+                streamElement.innerHTML = `<img src="data:image/svg+xml,${encodeURIComponent(streamData)}" alt="Stream from ${client.name}" class="img-fluid rounded">`;
+            }
+        });
+    }
+
+    setInterval(updateStreams, 1000);
+</script>
+{% endblock script %}

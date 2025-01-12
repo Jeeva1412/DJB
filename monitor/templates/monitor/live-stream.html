@@ -1,0 +1,118 @@
+{% extends 'main.html' %}
+
+{% block head %}
+<style>
+    .aspect-video {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+    .aspect-video > .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    #screen {
+        width: 100%;
+        border: 1px solid black;
+        border-radius: 0.5rem;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Live Stream Dashboard</h1>
+
+    <div class="card border-secondary mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Stream Controls</h5>
+        </div>
+        <div class="card-body">
+            <!-- Client Selection -->
+            <div class="mb-3">
+                <label for="clientSelect" class="form-label">Select a Client</label>
+                <select class="form-select" id="clientSelect">
+                    <option selected disabled>Choose...</option>
+                    <option value="Client001">Marketing PC</option>
+                    <option value="Client002">Sales Laptop</option>
+                    <option value="Client003">Design Workstation</option>
+                </select>
+            </div>
+            <!-- Start/Stop Button -->
+            <button id="streamButton" class="btn btn-primary w-100" disabled>Start Stream</button>
+        </div>
+    </div>
+
+    <!-- Live Stream Viewer -->
+    <div class="aspect-video border border-secondary">
+        <div id="streamContent" class="content">
+            <img id="screen" src="" alt="Live Stream" />
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    const clientSelect = document.getElementById('clientSelect');
+    const streamButton = document.getElementById('streamButton');
+    const screenImg = document.getElementById('screen');
+
+    let isStreaming = false;
+    let ws = null;
+
+    clientSelect.addEventListener('change', () => {
+        streamButton.disabled = false;
+    });
+
+    streamButton.addEventListener('click', () => {
+        isStreaming = !isStreaming;
+        streamButton.textContent = isStreaming ? 'Stop Stream' : 'Start Stream';
+
+        if (isStreaming) {
+            const clientId = clientSelect.value;
+            startStreaming(clientId);
+        } else {
+            stopStreaming();
+        }
+    });
+
+    function startStreaming(clientId) {
+        if (ws) {
+            ws.close();
+        }
+
+        ws = new WebSocket(`ws://127.0.0.1:8000/websockets/${clientId}`);
+
+        ws.onmessage = function(event) {
+            console.log("Frames are receiving...");
+            screenImg.src = "data:image/jpeg;base64," + event.data;
+        };
+
+        ws.onerror = function(error) {
+            console.error("WebSocket Error:", error);
+        };
+
+        ws.onclose = function() {
+            console.log("WebSocket connection closed.");
+        };
+
+        streamContent.style.backgroundColor = "#000"; // Indicate streaming started
+    }
+
+    function stopStreaming() {
+        if (ws) {
+            ws.close();
+            ws = null;
+        }
+
+        screenImg.src = "";
+        streamContent.style.backgroundColor = "#f8f9fa";
+    }
+</script>
+{% endblock script %}
